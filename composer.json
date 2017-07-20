@@ -1,0 +1,22 @@
+{
+  "name": "chrisharrison/json-repository",
+  "type": "library",
+  "authors": [
+    {
+      "name": "Chris Harrison",
+      "email": "c.harrison1988@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.0.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^5.7",
+    "mockery/mockery": "^0.9.7"
+  },
+  "autoload": {
+    "psr-4": {
+      "ChrisHarrison\\JsonRepository\\": "src/"
+    }
+  }
+}
