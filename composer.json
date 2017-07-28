@@ -8,7 +8,8 @@
     }
   ],
   "require": {
-    "php": ">=7.0.0"
+    "php": ">=7.0.0",
+    "danielgsims/php-collections": "^2.1"
   },
   "require-dev": {
     "phpunit/phpunit": "^5.7",

@@ -2,7 +2,7 @@
 
 namespace ChrisHarrison\JsonRepository\Persistence;
 
-class JsonRepository extends ArrayAccessRepository
+class JsonRepository extends ArrayObjectRepository
 {
     public function __construct(string $path)
     {
