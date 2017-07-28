@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 class PersistableJsonDocumentTest extends TestCase
 {
-    const PATH = __DIR__ . '/../../test/test.json';
+    const PATH = __DIR__ . '/../../test-data/test.json';
 
     public function setUp()
     {
