@@ -7,4 +7,4 @@ Requires PHP 7.0.0 or greater.
 
 ## Installation ##
 
-composer require chrisharrison/json-repository
+`composer require chrisharrison/json-repository`
