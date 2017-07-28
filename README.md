@@ -1,4 +1,7 @@
 # json-repository
+
+[![Build Status](https://travis-ci.org/chrisharrison/json-repository.svg?branch=master)](https://travis-ci.org/chrisharrison/json-repository)
+
 Implement repositories with a flat JSON file. Useful for providing a temporary persistence layer for repositories.
 
 ## Requirements ##
