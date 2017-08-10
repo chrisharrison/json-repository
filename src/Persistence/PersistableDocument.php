@@ -4,30 +4,37 @@ namespace ChrisHarrison\JsonRepository\Persistence;
 
 abstract class PersistableDocument extends \ArrayObject
 {
+    protected $filesystem;
     protected $path;
 
-    public function __construct(string $path, ?array $input = null)
+    public function __construct(FilesystemInterface $filesystem, string $path, ?array $input = null)
     {
+        $this->filesystem = $filesystem;
         $this->path = $path;
 
         if ($input === null) {
-            $input = static::load($path);
+            $input = $this->load();
         }
 
         parent::__construct($input);
     }
 
-    protected static function load(string $path) : array
+    protected function load() : array
     {
-        if (file_exists($path)) {
-            $content = file_get_contents($path);
-            $decode = static::decode($content);
+        if ($this->filesystem->has($this->path) {
+            $content = $this->filesystem->read($this->path);
+            $decode = $this->decode($content);
             if (is_array($decode)) {
                 return $decode;
             }
         }
-
+        
         return [];
+    }
+    
+    protected function persist()
+    {
+        $this->filesystem->put($this->path, $this->encode());
     }
 
     public function offsetSet($index, $newval)
@@ -42,11 +49,6 @@ abstract class PersistableDocument extends \ArrayObject
         $this->persist();
     }
 
-    protected function persist()
-    {
-        file_put_contents($this->path, $this->encode());
-    }
-
     abstract public function encode() : string;
-    abstract public static function decode(string $content) : array;
+    abstract public function decode(string $content) : array;
 }
