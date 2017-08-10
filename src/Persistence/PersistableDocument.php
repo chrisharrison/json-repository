@@ -23,7 +23,7 @@ abstract class PersistableDocument extends \ArrayObject
 
     protected function load() : array
     {
-        if ($this->filesystem->has($this->path) {
+        if ($this->filesystem->has($this->path)) {
             $content = $this->filesystem->read($this->path);
             $decode = $this->decode($content);
             if (is_array($decode)) {
