@@ -9,7 +9,7 @@ use League\Flysystem\Memory\MemoryAdapter;
 
 class PersistableJsonDocumentTest extends TestCase
 {
-    static PATH = 'test.json';
+    const PATH = 'test.json';
     
     private function filesystem() : FilesystemInterface
     {
