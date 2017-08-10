@@ -9,7 +9,7 @@ class PersistableJsonDocument extends PersistableDocument
         return json_encode($this);
     }
 
-    public static function decode(string $content) : array
+    public function decode(string $content) : array
     {
         return json_decode($content, true);
     }
