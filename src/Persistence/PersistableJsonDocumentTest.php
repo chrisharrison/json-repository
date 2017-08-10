@@ -31,18 +31,22 @@ class PersistableJsonDocumentTest extends TestCase
 
     public function testOffsetSet()
     {
-        $write = new PersistableJsonDocument($this->filesystem(), static::PATH, ['key' => 'value']);
+        $filesystem = $this->filesystem();
+        
+        $write = new PersistableJsonDocument($filesystem, static::PATH, ['key' => 'value']);
         $write->offsetSet('key2', 'value2');
         $this->assertEquals('value2', $write['key2']);
 
-        $read = new PersistableJsonDocument($this->filesystem(), static::PATH);
+        $read = new PersistableJsonDocument($filesystem, static::PATH);
         $this->assertEquals('value', $read['key']);
         $this->assertEquals('value2', $read['key2']);
     }
 
     public function testOffsetUnset()
     {
-        $write = new PersistableJsonDocument($this->filesystem(), static::PATH, [
+        $filesystem = $this->filesystem();
+        
+        $write = new PersistableJsonDocument($filesystem, static::PATH, [
             'setKey' => 'setValue',
             'unsetKey' => 'unsetValue'
         ]);
@@ -50,7 +54,7 @@ class PersistableJsonDocumentTest extends TestCase
         $this->assertTrue($write->offsetExists('setKey'));
         $this->assertFalse($write->offsetExists('unsetKey'));
 
-        $read = new PersistableJsonDocument($this->filesystem(), static::PATH);
+        $read = new PersistableJsonDocument($filesystem, static::PATH);
         $this->assertEquals('setValue', $read['setKey']);
         $this->assertFalse($read->offsetExists('unsetKey'));
     }
