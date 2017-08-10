@@ -2,11 +2,13 @@
 
 [![Build Status](https://travis-ci.org/chrisharrison/json-repository.svg?branch=master)](https://travis-ci.org/chrisharrison/json-repository)
 
-Implement repositories with a flat JSON file. Useful for providing a temporary persistence layer for repositories.
+Implement simple repositories backed with JSON files. The flat JSON files can be persisted using a local filesystem or an abstract filesystem provided by [Flysystem](https://github.com/thephpleague/flysystem) (e.g. Amazon S3).
+
+This package is useful for providing a temporary persistence layer when developing repository interfaces.
 
 ## Requirements ##
 
-Requires PHP 7.0.0 or greater.
+Requires PHP 7.1
 
 ## Installation ##
 
