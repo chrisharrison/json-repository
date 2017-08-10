@@ -2,6 +2,8 @@
 
 namespace ChrisHarrison\JsonRepository\Persistence;
 
+use League\Flysystem\FilesystemInterface;
+
 abstract class PersistableDocument extends \ArrayObject
 {
     protected $filesystem;
