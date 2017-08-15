@@ -25,6 +25,17 @@ class ArrayObjectRepository implements RepositoryInterface
         return null;
     }
 
+    public function getEntities() : EntityCollection
+    {
+        $entities = new EntityCollection;
+
+        foreach ($this->arrayObject as $id => $properties) {
+            $entities = $entities->add(new Entity($id, $properties));
+        }
+
+        return $entities;
+    }
+
     public function getEntitiesByProperties(array $keyValues) : EntityCollection
     {
         $entities = new EntityCollection;
