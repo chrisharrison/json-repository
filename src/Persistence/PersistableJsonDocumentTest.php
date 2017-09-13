@@ -14,6 +14,6 @@ class PersistableJsonDocumentTest extends TestCase
         $test = new PersistableJsonDocument($filesystem, 'test');
         $test['key'] = 'value';
         $encode = $test->encode();
-        $this->assertEquals(json_encode(['key' => 'value']), $encode);
+        $this->assertEquals(json_encode(['key' => 'value'], JSON_PRETTY_PRINT), $encode);
     }
 }
