@@ -4,20 +4,27 @@ namespace ChrisHarrison\JsonRepository\Repositories;
 
 use ChrisHarrison\JsonRepository\Collections\EntityCollection;
 use ChrisHarrison\JsonRepository\Entities\Entity;
+use ChrisHarrison\JsonRepository\Persistence\Encoders\EncryptedJsonEncoder;
+use ChrisHarrison\JsonRepository\Persistence\Encoders\JsonEncoder;
 use ChrisHarrison\JsonRepository\Persistence\PersistableDocument;
 use League\Flysystem\Filesystem;
+use Phlib\Encrypt\EncryptorInterface;
 
 final class EncryptedJsonRepository implements RepositoryInterface
 {
     private $repository;
 
-    public function __construct(Filesystem $filesystem, string $path)
+    public function __construct(Filesystem $filesystem, string $path, EncryptorInterface $encryptor, ?array $keysToEncrypt = null)
     {
         $this->repository = new ArrayObjectRepository(
             new PersistableDocument(
                 $filesystem,
                 $path,
-                new EncryptedJsonEncoder
+                new EncryptedJsonEncoder(
+                    $encryptor,
+                    new JsonEncoder,
+                    $keysToEncrypt
+                )
             )
         );
     }
