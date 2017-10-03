@@ -2,10 +2,10 @@
 
 namespace ChrisHarrison\JsonRepository\Entities;
 
-class Entity
+final class Entity
 {
-    protected $id;
-    protected $properties;
+    private $id;
+    private $properties;
 
     public function __construct(string $id, array $properties)
     {

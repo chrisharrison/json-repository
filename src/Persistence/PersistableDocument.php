@@ -2,17 +2,20 @@
 
 namespace ChrisHarrison\JsonRepository\Persistence;
 
+use ChrisHarrison\JsonRepository\Persistence\Encoders\PersistableDocumentEncoder;
 use League\Flysystem\FilesystemInterface;
 
-abstract class PersistableDocument extends \ArrayObject
+final class PersistableDocument extends \ArrayObject
 {
-    protected $filesystem;
-    protected $path;
+    private $filesystem;
+    private $path;
+    private $encoder;
 
-    public function __construct(FilesystemInterface $filesystem, string $path, ?array $input = null)
+    public function __construct(FilesystemInterface $filesystem, string $path, PersistableDocumentEncoder $encoder, ?array $input = null)
     {
         $this->filesystem = $filesystem;
         $this->path = $path;
+        $this->encoder = $encoder;
 
         if ($input === null) {
             $input = $this->load();
@@ -25,18 +28,18 @@ abstract class PersistableDocument extends \ArrayObject
     {
         if ($this->filesystem->has($this->path)) {
             $content = $this->filesystem->read($this->path);
-            $decode = $this->decode($content);
+            $decode = $this->encoder->decode($content);
             if (is_array($decode)) {
                 return $decode;
             }
         }
-        
+
         return [];
     }
     
     protected function persist()
     {
-        $this->filesystem->put($this->path, $this->encode());
+        $this->filesystem->put($this->path, $this->encoder->encode((array) $this));
     }
 
     public function offsetSet($index, $newval)
@@ -50,7 +53,4 @@ abstract class PersistableDocument extends \ArrayObject
         parent::offsetUnset($index);
         $this->persist();
     }
-
-    abstract public function encode() : string;
-    abstract public function decode(string $content) : array;
 }

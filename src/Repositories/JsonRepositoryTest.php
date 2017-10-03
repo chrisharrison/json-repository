@@ -1,6 +1,6 @@
 <?php
 
-namespace ChrisHarrison\JsonRepository\Persistence;
+namespace ChrisHarrison\JsonRepository\Repositories;
 
 use League\Flysystem\Adapter\NullAdapter;
 use League\Flysystem\Filesystem;
@@ -12,6 +12,6 @@ class JsonRepositoryTest extends TestCase
     {
         $filesystem = new Filesystem(new NullAdapter);
         $test = new JsonRepository($filesystem, 'test');
-        $this->assertInstanceOf(ArrayObjectRepository::class, $test);
+        $this->assertInstanceOf(RepositoryInterface::class, $test);
     }
 }

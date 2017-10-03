@@ -5,7 +5,7 @@ namespace ChrisHarrison\JsonRepository\Collections;
 use Collections\Collection;
 use ChrisHarrison\JsonRepository\Entities\Entity;
 
-class EntityCollection extends Collection
+final class EntityCollection extends Collection
 {
     public function __construct()
     {

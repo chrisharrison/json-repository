@@ -1,14 +1,13 @@
 <?php
 
-namespace ChrisHarrison\JsonRepository\Persistence;
+namespace ChrisHarrison\JsonRepository\Repositories;
 
 use ChrisHarrison\JsonRepository\Collections\EntityCollection;
 use ChrisHarrison\JsonRepository\Entities\Entity;
-use ChrisHarrison\JsonRepository\Repositories\RepositoryInterface;
 
-class ArrayObjectRepository implements RepositoryInterface
+final class ArrayObjectRepository implements RepositoryInterface
 {
-    protected $arrayObject;
+    private $arrayObject;
 
     public function __construct(\ArrayObject $arrayObject)
     {
@@ -25,6 +24,17 @@ class ArrayObjectRepository implements RepositoryInterface
         return null;
     }
 
+    public function getEntityByProperty(string $key, $value) : ?Entity
+    {
+        $findEntities = $this->getEntitiesByProperties([$key => $value]);
+
+        if ($findEntities->count() == 0) {
+            return null;
+        }
+
+        return $findEntities->first();
+    }
+
     public function getEntities() : EntityCollection
     {
         $entities = new EntityCollection;
@@ -38,21 +48,18 @@ class ArrayObjectRepository implements RepositoryInterface
 
     public function getEntitiesByProperties(array $keyValues) : EntityCollection
     {
-        $entities = new EntityCollection;
+        $entities = $this->getEntities();
 
-        foreach ($this->arrayObject as $id => $properties) {
+        return $entities->filter(function (Entity $entity) use ($keyValues) {
             $matches = 0;
             foreach ($keyValues as $key => $value) {
-                if (array_key_exists($key, $properties) && $properties[$key] == $value) {
+                $entityProperties = $entity->getProperties();
+                if (array_key_exists($key, $entityProperties) && $entityProperties[$key] == $value) {
                     $matches++;
                 }
             }
-            if ($matches == count($keyValues)) {
-                $entities = $entities->add(new Entity($id, $properties));
-            }
-        }
-
-        return $entities;
+            return $matches == count($keyValues);
+        });
     }
 
     public function putEntity(Entity $entity) : void

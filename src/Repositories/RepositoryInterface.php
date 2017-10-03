@@ -8,6 +8,7 @@ use ChrisHarrison\JsonRepository\Collections\EntityCollection;
 interface RepositoryInterface
 {
     public function getEntityById(string $id) : ?Entity;
+    public function getEntityByProperty(string $key, $value) : ?Entity;
     public function getEntities() : EntityCollection;
     public function getEntitiesByProperties(array $keyValues) : EntityCollection;
     public function putEntity(Entity $entity) : void;

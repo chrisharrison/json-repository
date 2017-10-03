@@ -1,6 +1,6 @@
 <?php
 
-namespace ChrisHarrison\JsonRepository\Persistence;
+namespace ChrisHarrison\JsonRepository\Repositories;
 
 use ChrisHarrison\JsonRepository\Entities\Entity;
 use PHPUnit\Framework\TestCase;

@@ -2,6 +2,7 @@
 
 namespace ChrisHarrison\JsonRepository\Persistence;
 
+use ChrisHarrison\JsonRepository\Persistence\Encoders\PersistableDocumentEncoder;
 use PHPUnit\Framework\TestCase;
 use League\Flysystem\FilesystemInterface;
 use League\Flysystem\Filesystem;
@@ -10,43 +11,58 @@ use League\Flysystem\Memory\MemoryAdapter;
 class PersistableDocumentTest extends TestCase
 {
     const PATH = 'test';
+
+    private $filesystem;
     
     private function filesystem() : FilesystemInterface
     {
-        return new Filesystem(new MemoryAdapter());
+        if ($this->filesystem == null) {
+            $this->filesystem = new Filesystem(new MemoryAdapter());
+        }
+        return $this->filesystem;
+    }
+
+    private function encoder() : PersistableDocumentEncoder
+    {
+        $encoder = $this->createMock(PersistableDocumentEncoder::class);
+        $encoder->method('encode')
+            ->will($this->returnCallback(function ($value) {
+                return serialize($value);
+            }));
+        $encoder->method('decode')
+            ->will($this->returnCallback(function ($value) {
+                return unserialize($value);
+            }));
+        return $encoder;
     }
     
     public function testOffsetExists()
     {
-        $test = new _PersistableDocument($this->filesystem(), static::PATH, ['key' => 'value']);
+        $test = new PersistableDocument($this->filesystem(), static::PATH, $this->encoder(), ['key' => 'value']);
         $this->assertTrue($test->offsetExists('key'));
         $this->assertFalse($test->offsetExists('dummy'));
     }
 
     public function testOffsetGet()
     {
-        $test = new _PersistableDocument($this->filesystem(), static::PATH, ['key' => 'value']);
+        $test = new PersistableDocument($this->filesystem(), static::PATH, $this->encoder(), ['key' => 'value']);
         $this->assertEquals('value', $test->offsetGet('key'));
     }
 
     public function testOffsetSet()
     {
-        $filesystem = $this->filesystem();
-        
-        $write = new _PersistableDocument($filesystem, static::PATH, ['key' => 'value']);
+        $write = new PersistableDocument($this->filesystem(), static::PATH, $this->encoder(), ['key' => 'value']);
         $write->offsetSet('key2', 'value2');
         $this->assertEquals('value2', $write['key2']);
 
-        $read = new _PersistableDocument($filesystem, static::PATH);
+        $read = new PersistableDocument($this->filesystem(), static::PATH, $this->encoder());
         $this->assertEquals('value', $read['key']);
         $this->assertEquals('value2', $read['key2']);
     }
 
     public function testOffsetUnset()
     {
-        $filesystem = $this->filesystem();
-        
-        $write = new _PersistableDocument($filesystem, static::PATH, [
+        $write = new PersistableDocument($this->filesystem(), static::PATH, $this->encoder(), [
             'setKey' => 'setValue',
             'unsetKey' => 'unsetValue'
         ]);
@@ -54,21 +70,8 @@ class PersistableDocumentTest extends TestCase
         $this->assertTrue($write->offsetExists('setKey'));
         $this->assertFalse($write->offsetExists('unsetKey'));
 
-        $read = new _PersistableDocument($filesystem, static::PATH);
+        $read = new PersistableDocument($this->filesystem(), static::PATH, $this->encoder());
         $this->assertEquals('setValue', $read['setKey']);
         $this->assertFalse($read->offsetExists('unsetKey'));
-    }
-}
-
-class _PersistableDocument extends PersistableDocument
-{
-    public function encode() : string
-    {
-        return json_encode($this);
-    }
-
-    public function decode(string $content) : array
-    {
-        return json_decode($content, true);
     }
 }
