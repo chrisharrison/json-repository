@@ -65,10 +65,12 @@ final class ArrayObjectRepository implements RepositoryInterface
     public function putEntity(Entity $entity) : void
     {
         $this->arrayObject[$entity->getId()] = $entity->getProperties();
+        return;
     }
 
     public function deleteEntityById(string $id) : void
     {
         unset($this->arrayObject[$id]);
+        return;
     }
 }

@@ -46,10 +46,12 @@ final class JsonRepository implements RepositoryInterface
     public function putEntity(Entity $entity) : void
     {
         $this->repository->putEntity($entity);
+        return;
     }
 
     public function deleteEntityById(string $id) : void
     {
         $this->repository->deleteEntityById($id);
+        return;
     }
 }

@@ -48,7 +48,7 @@ final class PersistableDocument extends \ArrayObject
         $this->persist();
     }
 
-    public function offsetUnset ($index)
+    public function offsetUnset($index)
     {
         parent::offsetUnset($index);
         $this->persist();
