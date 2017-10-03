@@ -36,7 +36,7 @@ class EncryptedJsonEncoderTest extends TestCase
 
         $jsonDecodedOutput = $jsonEncoder->decode($output);
         $this->assertEquals('value2', $jsonDecodedOutput['doNotEncrypt']);
-        $this->assertEquals(strrev('value'), $jsonDecodedOutput['key']);
+        $this->assertEquals(base64_encode(strrev('value')), $jsonDecodedOutput['key']);
 
         $this->assertEquals($test, $encoder->decode($output));
     }

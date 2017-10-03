@@ -44,7 +44,6 @@ class EncryptedJsonEncoder implements PersistableDocumentEncoder
 
             if ($this->keysToEncrypt === null || in_array($key, $this->keysToEncrypt)) {
                 $array[$key] = $iterator((string) $value);
-                var_dump($key, $value, $array[$key]);
             }
         }
 
