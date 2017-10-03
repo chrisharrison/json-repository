@@ -19,8 +19,8 @@ class EncryptedJsonEncoder implements PersistableDocumentEncoder
 
     public function encode(array $input) : string
     {
-        $encrypted = $this->iterateKeys($input, function ($value) {
-            return $this->encryptor->encrypt($value);
+        $encrypted = $this->iterateKeys($input, function (string $value) {
+            return base64_encode($this->encryptor->encrypt($value));
         });
         return $this->jsonEncoder->encode($encrypted);
     }
@@ -28,20 +28,26 @@ class EncryptedJsonEncoder implements PersistableDocumentEncoder
     public function decode(string $input) : array
     {
         $decoded = $this->jsonEncoder->decode($input);
-        return $this->iterateKeys($decoded, function ($value) {
-            return $this->encryptor->decrypt($value);
+        return $this->iterateKeys($decoded, function (string $value) {
+            return $this->encryptor->decrypt(base64_decode($value));
         });
     }
 
     private function iterateKeys(array $array, callable $iterator)
     {
         foreach ($array as $key => $value) {
-            if ($this->keysToEncrypt !== null && !in_array($key, $this->keysToEncrypt)) {
-                //Don't call iterator
+            //Recurse
+            if (is_array($value)) {
+                $array[$key] = $this->iterateKeys($value, $iterator);
                 continue;
             }
-            $array[$key] = $iterator($value);
+
+            if ($this->keysToEncrypt === null || in_array($key, $this->keysToEncrypt)) {
+                $array[$key] = $iterator((string) $value);
+                var_dump($key, $value, $array[$key]);
+            }
         }
+
         return $array;
     }
 }
