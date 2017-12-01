@@ -9,7 +9,7 @@
     }
   ],
   "require": {
-    "php": ">=7.1.0",
+    "php": "^7.1",
     "danielgsims/php-collections": "^2.1",
     "league/flysystem": "^1.0",
     "phlib/encrypt": "^2.0"
