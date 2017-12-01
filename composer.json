@@ -1,6 +1,7 @@
 {
   "name": "chrisharrison/json-repository",
   "type": "library",
+  "license": "MIT",
   "authors": [
     {
       "name": "Chris Harrison",
